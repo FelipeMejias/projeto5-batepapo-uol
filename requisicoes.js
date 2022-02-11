@@ -31,6 +31,11 @@ const intervaloMensagens= setInterval(carregarMensagens,3000)
 function carregarMensagens(){
     const promise= axios.get('https://mock-api.driven.com.br/api/v4/uol/messages');
     promise.then(filtrarMensagensRepetidas)
+    promise.catch(carregamentoMalSucedido)
+}
+
+function carregamentoMalSucedido(){
+    console.log('RUUUUUIMMMM')  // O que fazer quando der errado?
 }
 
 
@@ -109,7 +114,23 @@ function printarMensagemNormal(remetente,destinatario,conteudo,hora){
 }
 
 
+function postarMensagens(){
+    const inputMensagem= document.querySelector('.inputMensagem')
+    const objetoMensagem= {
+        from: meuUsuario,
+        to: contatoEscolhido,
+        text: inputMensagem.value,
+        type: tipoVisibilidade
+    };
+    const promise= axios.post('https://mock-api.driven.com.br/api/v4/uol/messages',objetoMensagem);
+    promise.then(postagemMensagemBemSucedida);
+    promise.catch(postagemMensagemMalSucedida);
+    inputMensagem.value=null;
+}
 
-function carregamentoMalSucedido(){
-    console.log('RUUUUUIMMMM')  // O que fazer quando der errado?
+function postagemMensagemBemSucedida(){
+    carregarMensagens()
+}
+function postagemMensagemMalSucedida(){
+    window.location.reload()
 }
