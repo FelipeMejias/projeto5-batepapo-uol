@@ -1,6 +1,6 @@
 function mostrarBarra(){
-    const barraLateral=document.querySelector('.barraLateral');
-    barraLateral.classList.toggle('esconde')
+    //const barraLateral=document.querySelector('.barraLateral');
+    //barraLateral.classList.toggle('esconde')
     const escurecedor=document.querySelector('.escurecedor');
     escurecedor.classList.toggle('esconde')
 }

@@ -16,7 +16,7 @@ function postagemUsuarioMalSucedida(erro){
 }
 }
 function postagemUsuarioBemSucedida(){
-    console.log('BOOOOOAAA');  // O que fazer quando der certo?
+    carregarMensagens()
 }
 
 function manterConexao(){
@@ -48,20 +48,66 @@ function filtrarMensagensRepetidas(dados){
         const horaMensagem=parseInt(stringHora)
         if(horaMensagem>horario){
             horario=horaMensagem;
-            printarMensagens(mensagem.from,mensagem.to,mensagem.text,mensagem.type,mensagem.time)
+            filtrarTipoMensagem(mensagem.from,mensagem.to,mensagem.text,mensagem.type,mensagem.time)
         }
         
     }
 }
 
-function printarMensagens(remetente,destinatario,conteudo,tipo,hora){
-    const listaMensagens=document.querySelector('.listaMensagens');
-        const penultimaMensagem=document.querySelector('.ultima');
-        if(penultimaMensagem!=null){penultimaMensagem.classList.remove('ultima')}
-        listaMensagens.innerHTML+=`<li class="ultima">${remetente} PARA ${destinatario} MANDOU ${conteudo} DO TIPO ${tipo} AS ${hora}</li>`
-        const ultimaMensagem=document.querySelector('.ultima');
-        ultimaMensagem.scrollIntoView();
+function filtrarTipoMensagem(remetente,destinatario,conteudo,tipo,hora){
+    const penultimaMensagem=document.querySelector('.ultima');
+    if(penultimaMensagem!=null){
+        penultimaMensagem.classList.remove('ultima')
+    }
+    if(tipo=="status"){
+        printarMensagemEntrarSair(remetente,conteudo,hora)
+    }else if(tipo=="private_message"){
+        printarMensagemReservada(remetente,destinatario,conteudo,hora)
+    }else{
+        printarMensagemNormal(remetente,destinatario,conteudo,hora)
+    }
+    const ultimaMensagem=document.querySelector('.ultima');
+    ultimaMensagem.scrollIntoView();
 }
+
+function printarMensagemEntrarSair(remetente,conteudo,hora){
+    const listaMensagens=document.querySelector('.listaMensagens');
+    listaMensagens.innerHTML+=`
+            <li class="mensagem ultima cinza">
+                <p>
+                <small>(${hora}) </small>
+                <strong>${remetente} </strong>
+                <span>${conteudo}</span>
+                </p>
+            </li>`
+}
+function printarMensagemReservada(remetente,destinatario,conteudo,hora){
+    const listaMensagens=document.querySelector('.listaMensagens');
+    listaMensagens.innerHTML+=`
+            <li class="mensagem ultima vermelho">
+                <p>
+                <small>(${hora}) </small>
+                <strong>${remetente} </strong>
+                <span> reservadamente para </span>
+                <strong>${destinatario}:</strong>
+                <span>${conteudo}</span>
+                </p>
+            </li>`
+}
+function printarMensagemNormal(remetente,destinatario,conteudo,hora){
+    const listaMensagens=document.querySelector('.listaMensagens');
+    listaMensagens.innerHTML+=`
+            <li class="mensagem ultima branco">
+                <p>
+                <small>(${hora}) </small>
+                <strong>${remetente} </strong>
+                <span> para </span>
+                <strong>${destinatario}:</strong>
+                <span>${conteudo}</span>
+                </p>
+            </li>`
+}
+
 
 
 function carregamentoMalSucedido(){

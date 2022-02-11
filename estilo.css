@@ -20,7 +20,6 @@ main{
     margin-bottom: 80px;
     width: 100%;
     height: calc(100vh - 160px);
-    background-color: green;
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -64,12 +63,12 @@ ion-icon{
 }
 
 
-aside{
+.barraLateral{
     height: 100vh;
     width: 259px;
     background-color: white;
     position: fixed;
-    right: 0;
+    right: -259px;
     z-index: 3;
 
 }
@@ -79,19 +78,19 @@ aside{
     
 }
 
-aside .escolhaUmContato span{
+.barraLateral .escolhaUmContato span{
     width:200px ;
     font-size: 16px;
     font-weight: 700;
 }
 
-aside ion-icon{
+.barraLateral ion-icon{
     font-size: 25px;
     margin-left: 20px;
     margin-right: 10px;
 }
 
-aside span{
+.barraLateral span{
     font-size: 16px;
     font-weight: 400;
 }
@@ -109,3 +108,17 @@ aside span{
     color:rgb(16, 214, 16)
 }
 
+.mensagem{
+    width: 100%;
+    
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.cinza{background-color: #DCDCDC;}
+.vermelho{background-color: #FFDEDE;}
+.branco{background-color: #FFFFFF;}
+
+strong{font-weight: 700;}
+small{color: #AAAAAA;}
+p{margin:12px;}
