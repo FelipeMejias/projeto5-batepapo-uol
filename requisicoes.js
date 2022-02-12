@@ -25,7 +25,7 @@ function manterConexao(){
 }
 
 const intervaloConexao= setInterval(manterConexao,5000)
-const intervaloMensagens= setInterval(carregarMensagens,3000)
+const intervaloMensagens= setInterval(carregarMensagens,10000)
 
 
 function carregarMensagens(){
@@ -41,6 +41,12 @@ function carregamentoMalSucedido(){
 
 let horario=0;
 
+function ataulizarHorarioDe12_59Para01_00(horaMensagem){
+    if(horaMensagem<200000 && horario>120000){
+        horario=0
+    }
+}
+
 
 function filtrarMensagensRepetidas(dados){
     let resposta=dados.data;
@@ -51,11 +57,11 @@ function filtrarMensagensRepetidas(dados){
         const array=atributoTempo.split(":")
         const stringHora= array[0]+array[1]+array[2]
         const horaMensagem=parseInt(stringHora)
+        ataulizarHorarioDe12_59Para01_00(horaMensagem);
         if(horaMensagem>horario){
             horario=horaMensagem;
             filtrarTipoMensagem(mensagem.from,mensagem.to,mensagem.text,mensagem.type,mensagem.time)
         }
-        
     }
 }
 
@@ -67,7 +73,9 @@ function filtrarTipoMensagem(remetente,destinatario,conteudo,tipo,hora){
     if(tipo=="status"){
         printarMensagemEntrarSair(remetente,conteudo,hora)
     }else if(tipo=="private_message"){
-        printarMensagemReservada(remetente,destinatario,conteudo,hora)
+        if(remetente==meuUsuario || destinatario==meuUsuario){
+            printarMensagemReservada(remetente,destinatario,conteudo,hora)
+        }
     }else{
         printarMensagemNormal(remetente,destinatario,conteudo,hora)
     }
@@ -75,10 +83,12 @@ function filtrarTipoMensagem(remetente,destinatario,conteudo,tipo,hora){
     ultimaMensagem.scrollIntoView();
 }
 
+
+
 function printarMensagemEntrarSair(remetente,conteudo,hora){
     const listaMensagens=document.querySelector('.listaMensagens');
     listaMensagens.innerHTML+=`
-            <li class="mensagem ultima cinza">
+            <li data-identifier="message" class="mensagem ultima cinza">
                 <p>
                 <small>(${hora}) </small>
                 <strong>${remetente} </strong>
@@ -89,7 +99,7 @@ function printarMensagemEntrarSair(remetente,conteudo,hora){
 function printarMensagemReservada(remetente,destinatario,conteudo,hora){
     const listaMensagens=document.querySelector('.listaMensagens');
     listaMensagens.innerHTML+=`
-            <li class="mensagem ultima vermelho">
+            <li data-identifier="message" class="mensagem ultima vermelho">
                 <p>
                 <small>(${hora}) </small>
                 <strong>${remetente} </strong>
@@ -102,7 +112,7 @@ function printarMensagemReservada(remetente,destinatario,conteudo,hora){
 function printarMensagemNormal(remetente,destinatario,conteudo,hora){
     const listaMensagens=document.querySelector('.listaMensagens');
     listaMensagens.innerHTML+=`
-            <li class="mensagem ultima branco">
+            <li data-identifier="message" class="mensagem ultima branco">
                 <p>
                 <small>(${hora}) </small>
                 <strong>${remetente} </strong>
