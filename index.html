@@ -7,14 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BatePapo Uol</title>
     <link href="estilo.css" rel="stylesheet">
+    <link href="favicon.png" rel="icon" type="image/x-icon" />
 </head>
 <body>
-    
+    <div class="telaLogin">
+        <img src="logo.png">
+        <input class="inputLogin" type="text" placeholder="Digite seu nome">
+        <button onclick="pegarNomeInput()">Entrar</button>
+    </div>
+
     <div class="barraLateral esconde">
         <div class="escolhaUmContato"><span>Escolha um contato para enviar mensagem:</span></div>
-        <div onclick="selecionarContato('todos','Todos')" class="div-contatos todos"><ion-icon name="people-outline"></ion-icon><span>Todos</span><ion-icon class="check esconde" name="checkmark-outline"></ion-icon></div>
-        <div onclick="selecionarContato('joao')" class="div-contatos joao"><ion-icon name="person-circle-outline"></ion-icon><span>João</span><ion-icon class="check esconde" name="checkmark-outline"></ion-icon></div>
-        <div onclick="selecionarContato('maria')" class="div-contatos maria"><ion-icon name="person-circle-outline"></ion-icon><span>Maria</span><ion-icon class="check esconde" name="checkmark-outline"></ion-icon></div>
+        <ul class="listaParticipantes">
+            
+            
+        </ul>
         <div class="escolhaUmContato"><span>Escolha a visibilidade:</span></div>
         <div onclick="selecionarVisibilidade('publico','message')" class="div-contatos publico"><ion-icon name="lock-open-outline"></ion-icon><span>Público</span><ion-icon class="check esconde" name="checkmark-outline"></ion-icon></div>
         <div onclick="selecionarVisibilidade('reservadamente','private_message')" class="div-contatos reservadamente"><ion-icon name="lock-closed-outline"></ion-icon><span>Reservadamente</span><ion-icon class="check esconde" name="checkmark-outline"></ion-icon></div>
@@ -47,6 +54,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="visibilidade.js"></script>
     <script src="requisicoes.js"></script>
+    <script src="mensagens.js"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     
 

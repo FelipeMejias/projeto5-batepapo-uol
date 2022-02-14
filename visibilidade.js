@@ -3,6 +3,7 @@ function mostrarBarra(){
     barraLateral.classList.toggle('esconde')
     const escurecedor=document.querySelector('.escurecedor');
     escurecedor.classList.toggle('esconde')
+    carregarUsuarios()
 }
 
 let checkContatoAntigo=null;
@@ -45,3 +46,35 @@ function escolherContatoVisibilidade(contato,visibilidade){
         mensagemVisibilidade.innerHTML='Enviando para '+contato+' ('+visibilidade+')'
     }
 }
+
+function receberContatos(resposta){
+    const listaRetornada=resposta.data
+    listaRetornada.forEach(adicionarParticipanteNaLista)
+    printarListaContatos()
+}
+
+let listaContatos=[]
+
+function adicionarParticipanteNaLista(objetoContato){
+    const nomeContato=objetoContato.name
+    listaContatos.push(nomeContato)
+}
+
+function printarListaContatos(){
+    const listaParticipantes=document.querySelector('.listaParticipantes')
+    listaParticipantes.innerHTML=`
+        <li onclick="selecionarContato('todos','Todos')" class="div-contatos todos">
+        <ion-icon name="people-outline"></ion-icon>
+        <span>Todos</span>
+        <ion-icon class="check esconde" name="checkmark-outline"></ion-icon></li>`
+    for(let k=0;k<listaContatos.length;k++){
+        listaParticipantes.innerHTML+=`
+            <li onclick="selecionarContato('contato_${listaContatos[k]}','${listaContatos[k]}')" class="div-contatos contato_${listaContatos[k]}">
+                <ion-icon name="person-circle-outline"></ion-icon>
+                <span>${listaContatos[k]}</span>
+                <ion-icon class="check esconde" name="checkmark-outline"></ion-icon>
+            </li>
+        `
+    }
+}
+

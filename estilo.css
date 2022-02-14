@@ -36,10 +36,12 @@ footer{
     justify-content: space-between;
     align-items: center;
 }
+
 .escrevaAqui{
     margin-left: 17px;
 }
-input{
+.inputMensagem{
+    width: calc(100vw - 120px);
     height: 30px;
     font-size:18px;
     border: 0px solid white;
@@ -122,3 +124,36 @@ ion-icon{
 strong{font-weight: 700;}
 small{color: #AAAAAA;}
 p{margin:12px;}
+
+.listaParticipantes{
+    height: calc(100vh - 350px);
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.telaLogin{
+    width: 100vw;height: 100vh;
+    background-color: white;
+    position: fixed;z-index: 4;
+    display: flex;flex-direction: column;
+    align-items: center;
+}
+
+.telaLogin img{
+    width: 130px;
+    margin:72px
+}
+button{
+    width: 109px;
+    height: 45px;
+    margin:15px;
+    border-radius: 9px;
+}
+
+.sumir{display: none;}
+
+.inputLogin{
+    height: 54px;
+    width: 260px;
+    font-size:18px;
+}

@@ -1,8 +1,13 @@
-let meuUsuario=prompt('Qual será seu nome de usuário?');
-postarNomeUsuario();
+//let meuUsuario=prompt('Qual será seu nome de usuário?');
+//postarNomeUsuario();
+let nomeUsuario=''
+function pegarNomeInput(){
+    nomeUsuario=document.querySelector('.inputLogin').value;
+    postarNomeUsuario(nomeUsuario)
+}
 
-function postarNomeUsuario(){
-    objetoUsuario={name:meuUsuario};
+function postarNomeUsuario(nome){
+    objetoUsuario={name:nome};
     const promise= axios.post('https://mock-api.driven.com.br/api/v4/uol/participants',objetoUsuario);
     promise.then(postagemUsuarioBemSucedida);
     promise.catch(postagemUsuarioMalSucedida);
@@ -11,21 +16,21 @@ function postarNomeUsuario(){
 function postagemUsuarioMalSucedida(erro){
     const numeroErro=erro.response.status
     if(numeroErro==400){
-    meuUsuario=prompt('Esse nome já está em uso. Escolha outro:');
-    postarNomeUsuario();
-}
+    alert('Esse nome já está em uso. Escolha outro'); 
+    }
 }
 function postagemUsuarioBemSucedida(){
     carregarMensagens()
+    const telaLogin=document.querySelector('.telaLogin');
+    telaLogin.classList.toggle('sumir')
 }
 
 function manterConexao(){
-    objetoUsuario={name:meuUsuario};
+    objetoUsuario={name:nomeUsuario};
     const promise= axios.post('https://mock-api.driven.com.br/api/v4/uol/status',objetoUsuario);
 }
 
-const intervaloConexao= setInterval(manterConexao,5000)
-const intervaloMensagens= setInterval(carregarMensagens,10000)
+
 
 
 function carregarMensagens(){
@@ -39,108 +44,11 @@ function carregamentoMalSucedido(){
 }
 
 
-let horario=0;
-
-function ataulizarHorarioDe12_59Para01_00(horaMensagem){
-    if(horaMensagem<200000 && horario>120000){
-        horario=0
-    }
+function carregarUsuarios(){
+    const promise=axios.get('https://mock-api.driven.com.br/api/v4/uol/participants')
+    promise.then(receberContatos)
 }
 
-
-function filtrarMensagensRepetidas(dados){
-    let resposta=dados.data;
-    console.log(resposta)
-    for(let k=0; k<resposta.length; k++){
-        const mensagem= resposta[k];
-        const atributoTempo= mensagem.time;
-        const array=atributoTempo.split(":")
-        const stringHora= array[0]+array[1]+array[2]
-        const horaMensagem=parseInt(stringHora)
-        ataulizarHorarioDe12_59Para01_00(horaMensagem);
-        if(horaMensagem>horario){
-            horario=horaMensagem;
-            filtrarTipoMensagem(mensagem.from,mensagem.to,mensagem.text,mensagem.type,mensagem.time)
-        }
-    }
-}
-
-function filtrarTipoMensagem(remetente,destinatario,conteudo,tipo,hora){
-    const penultimaMensagem=document.querySelector('.ultima');
-    if(penultimaMensagem!=null){
-        penultimaMensagem.classList.remove('ultima')
-    }
-    if(tipo=="status"){
-        printarMensagemEntrarSair(remetente,conteudo,hora)
-    }else if(tipo=="private_message"){
-        if(remetente==meuUsuario || destinatario==meuUsuario){
-            printarMensagemReservada(remetente,destinatario,conteudo,hora)
-        }
-    }else{
-        printarMensagemNormal(remetente,destinatario,conteudo,hora)
-    }
-    const ultimaMensagem=document.querySelector('.ultima');
-    ultimaMensagem.scrollIntoView();
-}
-
-
-
-function printarMensagemEntrarSair(remetente,conteudo,hora){
-    const listaMensagens=document.querySelector('.listaMensagens');
-    listaMensagens.innerHTML+=`
-            <li data-identifier="message" class="mensagem ultima cinza">
-                <p>
-                <small>(${hora}) </small>
-                <strong>${remetente} </strong>
-                <span>${conteudo}</span>
-                </p>
-            </li>`
-}
-function printarMensagemReservada(remetente,destinatario,conteudo,hora){
-    const listaMensagens=document.querySelector('.listaMensagens');
-    listaMensagens.innerHTML+=`
-            <li data-identifier="message" class="mensagem ultima vermelho">
-                <p>
-                <small>(${hora}) </small>
-                <strong>${remetente} </strong>
-                <span> reservadamente para </span>
-                <strong>${destinatario}:</strong>
-                <span>${conteudo}</span>
-                </p>
-            </li>`
-}
-function printarMensagemNormal(remetente,destinatario,conteudo,hora){
-    const listaMensagens=document.querySelector('.listaMensagens');
-    listaMensagens.innerHTML+=`
-            <li data-identifier="message" class="mensagem ultima branco">
-                <p>
-                <small>(${hora}) </small>
-                <strong>${remetente} </strong>
-                <span> para </span>
-                <strong>${destinatario}:</strong>
-                <span>${conteudo}</span>
-                </p>
-            </li>`
-}
-
-
-function postarMensagens(){
-    const inputMensagem= document.querySelector('.inputMensagem')
-    const objetoMensagem= {
-        from: meuUsuario,
-        to: contatoEscolhido,
-        text: inputMensagem.value,
-        type: tipoVisibilidade
-    };
-    const promise= axios.post('https://mock-api.driven.com.br/api/v4/uol/messages',objetoMensagem);
-    promise.then(postagemMensagemBemSucedida);
-    promise.catch(postagemMensagemMalSucedida);
-    inputMensagem.value=null;
-}
-
-function postagemMensagemBemSucedida(){
-    carregarMensagens()
-}
-function postagemMensagemMalSucedida(){
-    window.location.reload()
-}
+const intervaloConexao= setInterval(manterConexao,5000)
+const intervaloMensagens= setInterval(carregarMensagens,10000)
+const intervaloContatos= setInterval(carregarUsuarios,10000)
